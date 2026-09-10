@@ -243,7 +243,7 @@ namespace SCPDiscord.EventListeners
 		      break;
 	      case DiscordCommandSender discordSender:
 		      variables.Add("player-name", discordSender.Nickname);
-		      variables.Add("player-userid", discordSender.SenderId);
+		      variables.Add("player-userid", discordSender.DiscordUserID.ToString());
 		      senderType = "player";
 		      break;
       }
