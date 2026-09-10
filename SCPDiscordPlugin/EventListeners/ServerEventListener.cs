@@ -8,6 +8,7 @@ using LabApi.Features.Enums;
 using LabApi.Features.Wrappers;
 using PlayerRoles;
 using RemoteAdmin;
+using SCPDiscordPlugin.Utilities;
 
 namespace SCPDiscord.EventListeners
 {
@@ -234,10 +235,17 @@ namespace SCPDiscord.EventListeners
       };
 
       string senderType = "server";
-      if (ev.Sender is PlayerCommandSender playerSender && Player.Get(playerSender.ReferenceHub) != null)
+      switch (ev.Sender)
       {
-        variables.AddPlayerVariables(Player.Get(playerSender.ReferenceHub), "player");
-        senderType = "player";
+	      case PlayerCommandSender playerSender when Player.Get(playerSender.ReferenceHub) != null:
+		      variables.AddPlayerVariables(Player.Get(playerSender.ReferenceHub), "player");
+		      senderType = "player";
+		      break;
+	      case DiscordCommandSender discordSender:
+		      variables.Add("player-name", discordSender.Nickname);
+		      variables.Add("player-userid", discordSender.SenderId);
+		      senderType = "player";
+		      break;
       }
 
       switch (ev.CommandType)

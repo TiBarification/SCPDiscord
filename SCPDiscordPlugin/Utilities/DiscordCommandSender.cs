@@ -1,3 +1,5 @@
+using System;
+
 namespace SCPDiscordPlugin.Utilities;
 
 public class DiscordCommandSender : CommandSender
@@ -9,11 +11,11 @@ public class DiscordCommandSender : CommandSender
   public string DiscordUsername { get; set; }
   public ulong DiscordUserID { get; set; }
 
-  public override ulong Permissions => 0;
+  public override ulong Permissions => ulong.MaxValue;
 
-  public override byte KickPower => 0;
+  public override byte KickPower => byte.MaxValue;
 
-  public override bool FullPermissions => false;
+  public override bool FullPermissions => true;
 
   public DiscordCommandSender(ulong discordUserID, string discordUsername)
   {
@@ -26,7 +28,15 @@ public class DiscordCommandSender : CommandSender
     return true;
   }
 
-  public override void Print(string text) { /* ignored */ }
+  public override void Print(string text)
+  {
+	  ServerConsole.AddLog($"[ScpDiscord|{SenderId}] {text}");
+  }
+
+  public override void Print(string text, ConsoleColor c)
+  {
+	  ServerConsole.AddLog($"[ScpDiscord|{SenderId}] {text}", c);
+  }
 
   public override void RaReply(string text, bool success, bool logToConsole, string overrideDisplay) { /* ignored */ }
 }

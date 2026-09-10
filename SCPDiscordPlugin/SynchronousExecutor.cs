@@ -4,6 +4,7 @@ using SCPDiscord.Interface;
 using UnityEngine;
 using System.Linq;
 using LabApi.Features.Wrappers;
+using SCPDiscordPlugin.Utilities;
 
 namespace SCPDiscord
 {
@@ -26,7 +27,9 @@ namespace SCPDiscord
     {
       while (queuedCommands.TryDequeue(out ConsoleCommand command))
       {
-        string response = Server.RunCommand(command.Command);
+	    CommandSender sender = new DiscordCommandSender(command.DiscordUserID, command.DiscordUsername);
+	    Logger.Debug($"[SE] Running command: {command.Command} from {sender.Nickname} ({sender.SenderId})");
+        string response = Server.RunCommand(command.Command, sender);
 
         // Return help command feedback in list form instead
         if (command.Command.StartsWith("help") ||
